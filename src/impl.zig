@@ -30,10 +30,10 @@ pub fn support(query: c_int) bool {
 }
 
 /// Please close the handle after usage by using: `close`
-pub fn open(arch: enums.Arch, mode: enums.Mode) err.CapstoneError!Handle {
+pub fn open(arch: enums.Arch, mode: cs.cs_mode) err.CapstoneError!Handle {
     var handle: Handle = 0;
 
-    return err.toError(cs.cs_open(@intFromEnum(arch), @intFromEnum(mode), &handle)) orelse handle;
+    return err.toError(cs.cs_open(@intFromEnum(arch), mode, &handle)) orelse handle;
 }
 
 /// Closes a handle
@@ -212,7 +212,7 @@ test {
 }
 
 test "malloc and free" {
-    var handle = try open(.X86, .@"16");
+    var handle = try open(.X86, enums.Mode.extendComptime(.@"16", 0));
     defer close(&handle) catch {};
     const ins = try malloc(handle);
     defer free(ins);
@@ -226,15 +226,15 @@ test "disasm iter managed" {
     const testing = @import("std").testing;
     const allocator = testing.allocator;
 
-    var handle = try open(.X86, .@"64");
+    var handle = try open(.ARM, enums.Mode.from(.ARM));
     defer close(&handle) catch {};
 
-    var dis_iter = try disasmIterManaged(allocator, handle, "\x75\x14", 0x1000);
+    var dis_iter = try disasmIterManaged(allocator, handle, "\xEA\x00\x03\xFE", 0x1000);
     defer dis_iter.deinit();
 
     const ins = dis_iter.next().?;
     try testing.expect(ins.detail != null);
-    try testing.expectEqualStrings("jne", ins.mnemonic[0..3]);
+    try testing.expectEqualStrings("cdp2", ins.mnemonic[0..4]);
 }
 
 test "create, dupe and destroy Insn" {

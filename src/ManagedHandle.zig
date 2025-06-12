@@ -68,7 +68,7 @@ pub const Options = struct {
 native: impl.Handle,
 detail_on: bool,
 
-pub fn init(arch: enums.Arch, mode: enums.Mode, options: Options) !Self {
+pub fn init(arch: enums.Arch, mode: cs.cs_mode, options: Options) !Self {
     const handle = try impl.open(arch, mode);
 
     if (options.syntax != .DEFAULT) {
@@ -161,7 +161,7 @@ pub fn deinit(self: *Self) void {
 test "with options" {
     const code = "\x75\x14";
 
-    var handle = try init(.X86, .@"64", .{
+    var handle = try init(.X86, @intFromEnum(enums.Mode.@"64"), .{
         .syntax = .INTEL,
         .detail = true,
         .mnemonic = &.{.{ .id = cs.X86_INS_JNE, .mnemonic = "jnz" }},
@@ -179,7 +179,7 @@ test "with options" {
 test "disasm iter" {
     const code = "\x75\x14";
 
-    var handle = try init(.X86, .@"64", .{
+    var handle = try init(.X86, @intFromEnum(enums.Mode.@"64"), .{
         .syntax = .INTEL,
         .detail = true,
         .mnemonic = &.{.{ .id = cs.X86_INS_JNE, .mnemonic = "jnz" }},
@@ -197,7 +197,7 @@ test "create, dupe and destroy Insn" {
     const testing = @import("std").testing;
     const allocator = testing.allocator;
 
-    var handle = try init(.X86, .@"64", .{
+    var handle = try init(.X86, @intFromEnum(enums.Mode.@"64"), .{
         .syntax = .INTEL,
         .detail = true,
     });

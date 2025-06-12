@@ -25,7 +25,7 @@ const cs = @import("capstone-z");
 const CODE = "\x55\x48\x8b\x05\xb8\x13\x00\x00\xe9\xea\xbe\xad\xde\xff\x25\x23\x01\x00\x00\xe8\xdf\xbe\xad\xde\x74\xff";
 
 pub fn main() !void {
-    var handle = try cs.ManagedHandle.init(cs.Arch.X86, cs.Mode.@"64", .{
+    var handle = try cs.ManagedHandle.init(cs.Arch.X86, @intFromEnum(cs.Mode.@"64"), .{
         .syntax = .INTEL,
         .detail = true,
         .mnemonic = &.{.{ .id = cs.c.X86_INS_JMP, .mnemonic = "our_jmp" }},
