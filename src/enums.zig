@@ -24,7 +24,9 @@ pub const Arch = enum(cs.cs_arch) {
     ALL = 65535,
 };
 
-pub const Mode = enum(cs.cs_mode) {
+/// This is a workaround for msvc ABI, the translate_c translate's enum as c_int intead of c_uint.
+pub const cs_mode = c_uint;
+pub const Mode = enum(cs_mode) {
     LITTLE_ENDIAN = 0,
     BPF_EXTENDED = 1,
     @"16" = 2,
@@ -40,82 +42,82 @@ pub const Mode = enum(cs.cs_mode) {
     M680X_HCS08 = 1024,
     MOS65XX_65816_LONG_MX = 96,
 
-    pub const ARM: cs.cs_mode = @intFromEnum(Mode.LITTLE_ENDIAN);
-    pub const BPF_CLASSIC: cs.cs_mode = @intFromEnum(Mode.LITTLE_ENDIAN);
+    pub const ARM: cs_mode = @intFromEnum(Mode.LITTLE_ENDIAN);
+    pub const BPF_CLASSIC: cs_mode = @intFromEnum(Mode.LITTLE_ENDIAN);
 
-    pub const RISCV32: cs.cs_mode = @intFromEnum(Mode.BPF_EXTENDED);
+    pub const RISCV32: cs_mode = @intFromEnum(Mode.BPF_EXTENDED);
 
-    pub const M68K_000: cs.cs_mode = @intFromEnum(Mode.@"16");
-    pub const M680X_6301: cs.cs_mode = @intFromEnum(Mode.@"16");
-    pub const RISCV64: cs.cs_mode = @intFromEnum(Mode.@"16");
-    pub const MOS65XX_6502: cs.cs_mode = @intFromEnum(Mode.@"16");
-    pub const SH2: cs.cs_mode = @intFromEnum(Mode.@"16");
-    pub const TRICORE_110: cs.cs_mode = @intFromEnum(Mode.@"16");
+    pub const M68K_000: cs_mode = @intFromEnum(Mode.@"16");
+    pub const M680X_6301: cs_mode = @intFromEnum(Mode.@"16");
+    pub const RISCV64: cs_mode = @intFromEnum(Mode.@"16");
+    pub const MOS65XX_6502: cs_mode = @intFromEnum(Mode.@"16");
+    pub const SH2: cs_mode = @intFromEnum(Mode.@"16");
+    pub const TRICORE_110: cs_mode = @intFromEnum(Mode.@"16");
 
-    pub const M68K_010: cs.cs_mode = @intFromEnum(Mode.@"32");
-    pub const MIPS32: cs.cs_mode = @intFromEnum(Mode.@"32");
-    pub const M680X_6309: cs.cs_mode = @intFromEnum(Mode.@"32");
-    pub const RISCVC: cs.cs_mode = @intFromEnum(Mode.@"32");
-    pub const MOS65XX_65C02: cs.cs_mode = @intFromEnum(Mode.@"32");
-    pub const SH2A: cs.cs_mode = @intFromEnum(Mode.@"32");
-    pub const TRICORE_120: cs.cs_mode = @intFromEnum(Mode.@"32");
+    pub const M68K_010: cs_mode = @intFromEnum(Mode.@"32");
+    pub const MIPS32: cs_mode = @intFromEnum(Mode.@"32");
+    pub const M680X_6309: cs_mode = @intFromEnum(Mode.@"32");
+    pub const RISCVC: cs_mode = @intFromEnum(Mode.@"32");
+    pub const MOS65XX_65C02: cs_mode = @intFromEnum(Mode.@"32");
+    pub const SH2A: cs_mode = @intFromEnum(Mode.@"32");
+    pub const TRICORE_120: cs_mode = @intFromEnum(Mode.@"32");
 
-    pub const M68K_020: cs.cs_mode = @intFromEnum(Mode.@"64");
-    pub const MIPS64: cs.cs_mode = @intFromEnum(Mode.@"64");
-    pub const M680X_6800: cs.cs_mode = @intFromEnum(Mode.@"64");
-    pub const MOS65XX_W65C02: cs.cs_mode = @intFromEnum(Mode.@"64");
-    pub const SH3: cs.cs_mode = @intFromEnum(Mode.@"64");
-    pub const TRICORE_130: cs.cs_mode = @intFromEnum(Mode.@"64");
+    pub const M68K_020: cs_mode = @intFromEnum(Mode.@"64");
+    pub const MIPS64: cs_mode = @intFromEnum(Mode.@"64");
+    pub const M680X_6800: cs_mode = @intFromEnum(Mode.@"64");
+    pub const MOS65XX_W65C02: cs_mode = @intFromEnum(Mode.@"64");
+    pub const SH3: cs_mode = @intFromEnum(Mode.@"64");
+    pub const TRICORE_130: cs_mode = @intFromEnum(Mode.@"64");
 
-    pub const MICRO: cs.cs_mode = @intFromEnum(Mode.THUMB);
-    pub const V9: cs.cs_mode = @intFromEnum(Mode.THUMB);
-    pub const QPX: cs.cs_mode = @intFromEnum(Mode.THUMB);
-    pub const M68K_030: cs.cs_mode = @intFromEnum(Mode.THUMB);
-    pub const M680X_6801: cs.cs_mode = @intFromEnum(Mode.THUMB);
-    pub const MOS65XX_65816: cs.cs_mode = @intFromEnum(Mode.THUMB);
-    pub const SH4: cs.cs_mode = @intFromEnum(Mode.THUMB);
-    pub const TRICORE_131: cs.cs_mode = @intFromEnum(Mode.THUMB);
+    pub const MICRO: cs_mode = @intFromEnum(Mode.THUMB);
+    pub const V9: cs_mode = @intFromEnum(Mode.THUMB);
+    pub const QPX: cs_mode = @intFromEnum(Mode.THUMB);
+    pub const M68K_030: cs_mode = @intFromEnum(Mode.THUMB);
+    pub const M680X_6801: cs_mode = @intFromEnum(Mode.THUMB);
+    pub const MOS65XX_65816: cs_mode = @intFromEnum(Mode.THUMB);
+    pub const SH4: cs_mode = @intFromEnum(Mode.THUMB);
+    pub const TRICORE_131: cs_mode = @intFromEnum(Mode.THUMB);
 
-    pub const MIPS3: cs.cs_mode = @intFromEnum(Mode.MCLASS);
-    pub const SPE: cs.cs_mode = @intFromEnum(Mode.MCLASS);
-    pub const M68K_040: cs.cs_mode = @intFromEnum(Mode.MCLASS);
-    pub const M680X_6805: cs.cs_mode = @intFromEnum(Mode.MCLASS);
-    pub const MOS65XX_65816_LONG_M: cs.cs_mode = @intFromEnum(Mode.MCLASS);
-    pub const SH4A: cs.cs_mode = @intFromEnum(Mode.MCLASS);
-    pub const TRICORE_160: cs.cs_mode = @intFromEnum(Mode.MCLASS);
+    pub const MIPS3: cs_mode = @intFromEnum(Mode.MCLASS);
+    pub const SPE: cs_mode = @intFromEnum(Mode.MCLASS);
+    pub const M68K_040: cs_mode = @intFromEnum(Mode.MCLASS);
+    pub const M680X_6805: cs_mode = @intFromEnum(Mode.MCLASS);
+    pub const MOS65XX_65816_LONG_M: cs_mode = @intFromEnum(Mode.MCLASS);
+    pub const SH4A: cs_mode = @intFromEnum(Mode.MCLASS);
+    pub const TRICORE_160: cs_mode = @intFromEnum(Mode.MCLASS);
 
-    pub const MIPS32R6: cs.cs_mode = @intFromEnum(Mode.V8);
-    pub const BOOKE: cs.cs_mode = @intFromEnum(Mode.V8);
-    pub const M68K_060: cs.cs_mode = @intFromEnum(Mode.V8);
-    pub const M680X_6808: cs.cs_mode = @intFromEnum(Mode.V8);
-    pub const MOS65XX_65816_LONG_X: cs.cs_mode = @intFromEnum(Mode.V8);
-    pub const SHFPU: cs.cs_mode = @intFromEnum(Mode.V8);
-    pub const TRICORE_161: cs.cs_mode = @intFromEnum(Mode.V8);
+    pub const MIPS32R6: cs_mode = @intFromEnum(Mode.V8);
+    pub const BOOKE: cs_mode = @intFromEnum(Mode.V8);
+    pub const M68K_060: cs_mode = @intFromEnum(Mode.V8);
+    pub const M680X_6808: cs_mode = @intFromEnum(Mode.V8);
+    pub const MOS65XX_65816_LONG_X: cs_mode = @intFromEnum(Mode.V8);
+    pub const SHFPU: cs_mode = @intFromEnum(Mode.V8);
+    pub const TRICORE_161: cs_mode = @intFromEnum(Mode.V8);
 
-    pub const PS: cs.cs_mode = @intFromEnum(Mode.MIPS2);
-    pub const M680X_6809: cs.cs_mode = @intFromEnum(Mode.MIPS2);
-    pub const SHDSP: cs.cs_mode = @intFromEnum(Mode.MIPS2);
-    pub const TRICORE_162: cs.cs_mode = @intFromEnum(Mode.MIPS2);
+    pub const PS: cs_mode = @intFromEnum(Mode.MIPS2);
+    pub const M680X_6809: cs_mode = @intFromEnum(Mode.MIPS2);
+    pub const SHDSP: cs_mode = @intFromEnum(Mode.MIPS2);
+    pub const TRICORE_162: cs_mode = @intFromEnum(Mode.MIPS2);
 
     const Self = @This();
 
-    pub fn extend(self: Self, others: []const Self) cs.cs_mode {
-        var result: cs.cs_mode = @intFromEnum(self);
+    pub fn extend(self: Self, others: []const Self) cs_mode {
+        var result: cs_mode = @intFromEnum(self);
         for (others) |other| {
             result |= @intFromEnum(other);
         }
         return result;
     }
 
-    pub fn extendInt(self: Self, others: []const cs.cs_mode) cs.cs_mode {
-        var result: cs.cs_mode = @intFromEnum(self);
+    pub fn extendInt(self: Self, others: []const cs_mode) cs_mode {
+        var result: cs_mode = @intFromEnum(self);
         for (others) |other| {
             result |= other;
         }
         return result;
     }
 
-    inline fn getInt(comptime literal: @TypeOf(.enum_literal)) ?cs.cs_mode {
+    inline fn getInt(comptime literal: @TypeOf(.enum_literal)) ?cs_mode {
         const self_type_info = @typeInfo(Self);
         const self_enum = self_type_info.@"enum";
         const literal_name = @tagName(literal);
@@ -137,11 +139,11 @@ pub const Mode = enum(cs.cs_mode) {
         };
     }
 
-    pub fn extendComptime(comptime a: anytype, comptime b: anytype) cs.cs_mode {
+    pub fn extendComptime(comptime a: anytype, comptime b: anytype) cs_mode {
         const a_type_info = @typeInfo(@TypeOf(a));
         const b_type_info = @typeInfo(@TypeOf(b));
 
-        var result: cs.cs_mode = 0;
+        var result: cs_mode = 0;
         if (a_type_info == .int or a_type_info == .comptime_int) {
             result = a;
         } else if (a_type_info == .enum_literal) {
@@ -161,7 +163,7 @@ pub const Mode = enum(cs.cs_mode) {
         return result;
     }
 
-    pub fn from(comptime literal: @TypeOf(.enum_literal)) cs.cs_mode {
+    pub fn from(comptime literal: @TypeOf(.enum_literal)) cs_mode {
         return getInt(literal) orelse @compileError("'" ++ @tagName(literal) ++ "' is not valid `Mode` enum literal");
     }
 };

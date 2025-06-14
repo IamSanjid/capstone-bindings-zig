@@ -6,6 +6,7 @@ pub const setup = @import("setup.zig");
 pub const enums = @import("enums.zig");
 const iter = @import("iter.zig");
 
+pub const cs_mode = enums.cs_mode;
 pub const IterUnmanaged = iter.IterUnmanaged;
 pub const IterManaged = iter.IterManaged;
 pub const Handle = cs.csh;
@@ -30,10 +31,10 @@ pub fn support(query: c_int) bool {
 }
 
 /// Please close the handle after usage by using: `close`
-pub fn open(arch: enums.Arch, mode: cs.cs_mode) err.CapstoneError!Handle {
+pub fn open(arch: enums.Arch, mode: cs_mode) err.CapstoneError!Handle {
     var handle: Handle = 0;
 
-    return err.toError(cs.cs_open(@intFromEnum(arch), mode, &handle)) orelse handle;
+    return err.toError(cs.cs_open(@intFromEnum(arch), @intCast(mode), &handle)) orelse handle;
 }
 
 /// Closes a handle
@@ -42,7 +43,7 @@ pub fn close(handle: *Handle) err.CapstoneError!void {
 }
 
 pub fn option(handle: ?Handle, @"type": enums.Type, value: usize) err.CapstoneError!void {
-    return err.toError(cs.cs_option(handle orelse 0, @intFromEnum(@"type"), value)) orelse return;
+    return err.toError(cs.cs_option(handle orelse 0, @intFromEnum(@"type"), @intCast(value))) orelse return;
 }
 
 pub fn errno(handle: Handle) err.CapstoneError!void {

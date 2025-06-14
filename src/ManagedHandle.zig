@@ -68,11 +68,11 @@ pub const Options = struct {
 native: impl.Handle,
 detail_on: bool,
 
-pub fn init(arch: enums.Arch, mode: cs.cs_mode, options: Options) !Self {
+pub fn init(arch: enums.Arch, mode: impl.cs_mode, options: Options) !Self {
     const handle = try impl.open(arch, mode);
 
     if (options.syntax != .DEFAULT) {
-        try impl.option(handle, .SYNTAX, @intFromEnum(options.syntax));
+        try impl.option(handle, .SYNTAX, @intCast(@intFromEnum(options.syntax)));
     }
 
     if (options.detail) {

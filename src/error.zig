@@ -17,7 +17,7 @@ pub const CapstoneError = error{
     X86_MASM,
 };
 
-pub fn toError(err: c_uint) ?CapstoneError {
+pub fn toError(err: cs.cs_err) ?CapstoneError {
     return switch (err) {
         1 => CapstoneError.Memory,
         2 => CapstoneError.Arch,
@@ -37,7 +37,7 @@ pub fn toError(err: c_uint) ?CapstoneError {
     };
 }
 
-pub fn fromError(err: CapstoneError) c_uint {
+pub fn fromError(err: CapstoneError) cs.cs_err {
     return switch (err) {
         CapstoneError.Memory => 1,
         CapstoneError.Arch => 2,
