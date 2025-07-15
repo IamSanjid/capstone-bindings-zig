@@ -12,11 +12,11 @@ const VaList = if (builtin.os.tag == .windows and builtin.cpu.arch == .x86_64)
 else
     std.builtin.VaList;
 
-pub const MallocFunction = ?*const fn (usize) callconv(.C) ?*anyopaque;
-pub const CallocFunction = ?*const fn (usize, usize) callconv(.C) ?*anyopaque;
-pub const ReallocFunction = ?*const fn (?*anyopaque, usize) callconv(.C) ?*anyopaque;
-pub const FreeFunction = ?*const fn (?*anyopaque) callconv(.C) void;
-pub const VsnprintfFunction = ?*const fn ([*]u8, usize, [*]const u8, [*]VaList) callconv(.C) c_int;
+pub const MallocFunction = ?*const fn (usize) callconv(.c) ?*anyopaque;
+pub const CallocFunction = ?*const fn (usize, usize) callconv(.c) ?*anyopaque;
+pub const ReallocFunction = ?*const fn (?*anyopaque, usize) callconv(.c) ?*anyopaque;
+pub const FreeFunction = ?*const fn (?*anyopaque) callconv(.c) void;
+pub const VsnprintfFunction = ?*const fn ([*]u8, usize, [*]const u8, [*]VaList) callconv(.c) c_int;
 
 var ALLOCATOR: ?std.mem.Allocator = null;
 
@@ -25,7 +25,7 @@ const PtrAddress = usize;
 const AllocationTable = std.AutoArrayHashMapUnmanaged(PtrAddress, PtrLen);
 var ALLOCATION_TABLE: AllocationTable = .{};
 
-fn malloc(size: usize) callconv(.C) ?*anyopaque {
+fn malloc(size: usize) callconv(.c) ?*anyopaque {
     if (ALLOCATOR) |alloc| {
         const allocated = if (builtin.zig_version.major == 0 and builtin.zig_version.minor == 14)
             alloc.alignedAlloc(u8, 16, size) catch return null
@@ -38,7 +38,7 @@ fn malloc(size: usize) callconv(.C) ?*anyopaque {
     }
 }
 
-fn calloc(size: usize, elements: usize) callconv(.C) ?*anyopaque {
+fn calloc(size: usize, elements: usize) callconv(.c) ?*anyopaque {
     if (ALLOCATOR) |alloc| {
         const allocated = alloc.alloc(u8, elements * size) catch return null;
         ALLOCATION_TABLE.put(alloc, @intFromPtr(allocated.ptr), allocated.len) catch @panic("OOM");
@@ -51,7 +51,7 @@ fn calloc(size: usize, elements: usize) callconv(.C) ?*anyopaque {
     }
 }
 
-fn realloc(ptr: ?*anyopaque, new_size: usize) callconv(.C) ?*anyopaque {
+fn realloc(ptr: ?*anyopaque, new_size: usize) callconv(.c) ?*anyopaque {
     if (ptr) |p| {
         if (ALLOCATOR) |alloc| {
             const prior = ALLOCATION_TABLE.fetchSwapRemove(@intFromPtr(p)) orelse @panic("Realloc called without element in list");
@@ -68,7 +68,7 @@ fn realloc(ptr: ?*anyopaque, new_size: usize) callconv(.C) ?*anyopaque {
     }
 }
 
-fn free(ptr: ?*anyopaque) callconv(.C) void {
+fn free(ptr: ?*anyopaque) callconv(.c) void {
     if (ptr == null) {
         // nothing to free
         return;
@@ -84,7 +84,7 @@ fn free(ptr: ?*anyopaque) callconv(.C) void {
     }
 }
 
-extern "C" fn vsnprintf([*c]u8, usize, [*c]const u8, [*c]VaList) callconv(.C) c_int;
+extern "C" fn vsnprintf([*c]u8, usize, [*c]const u8, [*c]VaList) callconv(.c) c_int;
 
 /// Inits Capstone to be used with Zig
 pub fn initCapstone(alloc: std.mem.Allocator) err.CapstoneError!void {

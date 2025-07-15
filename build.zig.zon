@@ -6,8 +6,8 @@
 
     .dependencies = .{
         .capstone = .{
-            .url = "git+https://github.com/allyourcodebase/capstone.git#5.0.1-2",
-            .hash = "capstone-5.0.1-tmNUgTRHAAC1nFVy0colCWwUSRm05SWdD-4kU5MK4ZpH",
+            .url = "git+https://github.com/IamSanjid/capstone-5.0.1-2.git#121c66c781ef87fea6cac45c7c09bf93d1ac09d7",
+            .hash = "capstone-5.0.1-tmNUgd5HAAA5CGiUD9vCCxq6m5ByhHam3DS1wQZiHmLw",
         },
     },
 

@@ -135,7 +135,7 @@ pub fn dupeInsn(self: Self, allocator: Allocator, ins: *const insn.Insn) !*insn.
     new_ins.* = ins.*;
 
     if (self.detail_on and ins.detail == null) {
-        std.io.getStdErr().writer().print("Cannot duplicate `ins`, doesn't have detail.\n", .{}) catch {};
+        std.fs.File.stdout().deprecatedWriter().print("Cannot duplicate `ins`, doesn't have detail.\n", .{}) catch {};
         return error.NotEnoughFields;
     }
 
@@ -154,7 +154,7 @@ pub fn destroyInsn(_: Self, allocator: Allocator, ins: *insn.Insn) void {
 
 pub fn deinit(self: *Self) void {
     impl.close(&self.native) catch |e| {
-        std.io.getStdErr().writer().print("Failed to close handle: {any}\n", .{impl.strerror(e)}) catch {};
+        std.fs.File.stdout().deprecatedWriter().print("Failed to close handle: {any}\n", .{impl.strerror(e)}) catch {};
     };
 }
 

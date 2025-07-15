@@ -35,9 +35,11 @@ pub fn build(b: *std.Build) void {
     mod.addIncludePath(compiled_capstone.getEmittedIncludeTree());
 
     const mod_test = b.addTest(.{
-        .root_source_file = b.path("src/tests.zig"),
-        .target = target,
-        .optimize = optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/tests.zig"),
+            .target = target,
+            .optimize = optimize,
+        }),
     });
     mod_test.step.dependOn(&compiled_capstone.step);
 
